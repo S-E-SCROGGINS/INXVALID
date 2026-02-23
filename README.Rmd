@@ -1,4 +1,4 @@
-[![R-CMD-check](https://github.com/S-E-SCROGGINS/INXVALID/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/S-E-SCROGGINS/INXVALID/actions)
+
 
 ---
 title: "INXVALID"
