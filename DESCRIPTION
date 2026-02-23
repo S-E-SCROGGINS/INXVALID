@@ -13,3 +13,5 @@ Suggests:
 Config/testthat/edition: 3
 Imports: 
     lavaan
+URL: https://github.com/S-E-SCROGGINS/INXVALID
+BugReports: https://github.com/S-E-SCROGGINS/INXVALID/issues
