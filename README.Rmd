@@ -28,7 +28,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```r
 # install.packages("devtools")
-devtools::install_github("yourusername/INXVALID")
+devtools::install_github("S-E-SCROGGINS/INXVALID")
 ```
 
 ---
