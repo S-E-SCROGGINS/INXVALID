@@ -62,8 +62,9 @@ bi_var <- function(df, threshold = 0.7) {
   out <- out[order(abs(out$r), decreasing = TRUE), , drop = FALSE]
   rownames(out) <- NULL
 
-  # Printed summary
   print(out, row.names = FALSE)
+
+  invisible(out)
 
   out
 }

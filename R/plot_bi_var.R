@@ -1,42 +1,62 @@
-#' Plot bivariate correlations from bi_var()
+#' Plot bivariate correlation heatmap
 #'
-#' Creates a horizontal bar chart of Pearson correlations returned by `bi_var()`.
+#' Creates a lower-triangle heatmap of Pearson correlations among all
+#' numeric columns in a data frame using pairwise complete observations.
 #'
-#' @param x Result object returned by `bi_var()`
+#' @param df A data.frame of numeric variables. NAs allowed.
 #'
 #' @return A ggplot object
 #' @export
-plot_bi_var <- function(x) {
+plot_bi_var <- function(df) {
 
-  if (!is.data.frame(x)) {
-    stop("Input must be the data.frame returned by bi_var().", call. = FALSE)
+  .check_index_df(df)
+
+  if (ncol(df) < 2) {
+    stop("`df` must have at least 2 columns to plot bivariate correlations.", call. = FALSE)
   }
 
-  # Detect column names automatically
-  cn <- names(x)
+  cor_mat <- stats::cor(df, use = "pairwise.complete.obs", method = "pearson")
 
-  var1_col <- cn[1]
-  var2_col <- cn[2]
-  r_col <- cn[3]
+  cor_df <- as.data.frame(as.table(cor_mat), stringsAsFactors = FALSE)
+  names(cor_df) <- c("var1", "var2", "r")
 
-  df <- x
-  df$pair <- paste(df[[var1_col]], "-", df[[var2_col]])
+  # Keep only lower triangle including diagonal
+  cor_df$var1 <- factor(cor_df$var1, levels = colnames(cor_mat))
+  cor_df$var2 <- factor(cor_df$var2, levels = colnames(cor_mat))
+
+  cor_df$row_id <- as.integer(cor_df$var1)
+  cor_df$col_id <- as.integer(cor_df$var2)
+
+  cor_df <- cor_df[cor_df$row_id >= cor_df$col_id, , drop = FALSE]
 
   p <- ggplot2::ggplot(
-    df,
-    ggplot2::aes(
-      x = reorder(pair, abs(.data[[r_col]])),
-      y = .data[[r_col]]
-    )
+    cor_df,
+    ggplot2::aes(x = var2, y = var1, fill = r)
   ) +
-    ggplot2::geom_col() +
-    ggplot2::coord_flip() +
-    ggplot2::labs(
-      x = "Variable Pair",
-      y = "Pearson Correlation",
-      title = "Bivariate Correlations Above Threshold"
+    ggplot2::geom_tile(color = "white") +
+    ggplot2::geom_text(
+      ggplot2::aes(label = sprintf("%.2f", r)),
+      size = 3
     ) +
-    ggplot2::theme_minimal()
+    ggplot2::scale_fill_gradient2(
+      low = "blue",
+      mid = "white",
+      high = "red",
+      midpoint = 0,
+      limits = c(-1, 1)
+    ) +
+    ggplot2::labs(
+      x = NULL,
+      y = NULL,
+      fill = "r",
+      title = "Bivariate Correlation Heatmap"
+    ) +
+    ggplot2::theme_minimal() +
+    ggplot2::theme(
+      axis.text.x = ggplot2::element_text(angle = 45, hjust = 1),
+      panel.grid = ggplot2::element_blank()
+    ) +
+    ggplot2::coord_fixed()
 
   return(p)
 }
