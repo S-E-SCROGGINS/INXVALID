@@ -1,5 +1,3 @@
-INXVALID
-================
 
 # INXVALID
 
@@ -114,3 +112,5 @@ Planned extensions include:
 ## 👤 Author
 
 Stephen Scroggins, PhD
+
+
