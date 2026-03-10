@@ -12,23 +12,21 @@ plot_bi_var <- function(x) {
     stop("Input must be the data.frame returned by bi_var().", call. = FALSE)
   }
 
-  required_cols <- c("var1", "var2", "r")
-  if (!all(required_cols %in% names(x))) {
-    stop("Input must contain columns: var1, var2, r.", call. = FALSE)
-  }
+  # Detect column names automatically
+  cn <- names(x)
 
-  if (nrow(x) == 0) {
-    stop("Input has no rows to plot. bi_var() returned no correlations meeting the threshold.", call. = FALSE)
-  }
+  var1_col <- cn[1]
+  var2_col <- cn[2]
+  r_col <- cn[3]
 
   df <- x
-  df$pair <- paste(df$var1, "-", df$var2)
+  df$pair <- paste(df[[var1_col]], "-", df[[var2_col]])
 
   p <- ggplot2::ggplot(
     df,
     ggplot2::aes(
-      x = reorder(pair, abs(r)),
-      y = r
+      x = reorder(pair, abs(.data[[r_col]])),
+      y = .data[[r_col]]
     )
   ) +
     ggplot2::geom_col() +
