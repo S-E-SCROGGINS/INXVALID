@@ -23,7 +23,7 @@ theoretical structure, and contribution balance among variables.
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("yourusername/INXVALID")
+devtools::install_github("S-E-SCROGGINS/INXVALID")
 ```
 
 ------------------------------------------------------------------------
@@ -82,7 +82,7 @@ INXVALID follows a four-step validation pipeline:
 
 ------------------------------------------------------------------------
 
-## 📊 Output Philosophy
+## 📊 Output
 
 All functions in INXVALID:
 
